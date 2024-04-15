@@ -31,7 +31,7 @@ type Queue = Text
 
 -- | Publish the produced messages
 produce ::
-  (MonadIO m) =>
+  (MonadAsync m) =>
   Channel ->
   Stream m SendInstructions ->
   Stream m ()
@@ -45,7 +45,7 @@ produce channel = S.mapM send
 --
 -- See @Network.AMQP.consumeMsgs@ for options
 consume ::
-  (MonadIO m) =>
+  (MonadAsync m) =>
   Channel ->
   Queue ->
   Ack ->
