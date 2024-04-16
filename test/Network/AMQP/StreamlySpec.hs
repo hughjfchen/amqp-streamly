@@ -20,7 +20,12 @@ import qualified Data.ByteString.Lazy.Char8    as B
 import           Data.Maybe                     ( fromJust )
 import qualified Data.Text                     as T
 import           System.Process                 ( readProcess )
-import qualified Streamly.Prelude              as S
+import Streamly.Data.Stream
+import qualified Streamly.Data.Stream as S
+import Streamly.Data.Stream.Prelude
+import qualified Streamly.Data.Stream.Prelude as S
+import Streamly.Data.Fold
+import qualified Streamly.Data.Fold as Fold
 
 main :: IO ()
 main = hspec spec
@@ -45,9 +50,9 @@ spec =
                            arbitraryQueue
                            arbitraryExchange
                            arbitraryRoutingKey
-        S.drain $ produce channel $ S.fromList $ map fixedInstructions messages
+        S.fold Fold.drain $ produce channel $ S.fromList $ map fixedInstructions messages
         S.toList
-          (   S.take (length messages)
+          (   S.take (Prelude.length messages)
           $   fst
           <$> consume channel arbitraryQueue NoAck
           )
